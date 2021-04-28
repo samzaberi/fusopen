@@ -33,8 +33,15 @@ const App = () => {
     setVotecount(newVoteCount)
   }
 
+  const getMaxVotes = () => {
+    let maxKey = Object.keys(votecount).reduce((a, b) => votecount[a] > votecount[b] ? a : b);
+    console.log(maxKey)
+    return maxKey
+  }
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votecount[selected]} votes</p>
       <button onClick={() => setSelected(getRandomInt(5))}>
@@ -43,6 +50,9 @@ const App = () => {
       <button onClick={handleVoteClick}>
         vote
       </button>
+      <h1>Anecdote with the most votes</h1>
+      <p> {anecdotes[getMaxVotes()]}</p>
+      <p>has {votecount[getMaxVotes()]} votes</p>
     </div>
   )
 }
