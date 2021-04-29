@@ -28,11 +28,16 @@ const Content = (props) => {
   )
 }
 
-const Total = (props) => {
-  console.log(props)
+const Total = ({ parts }) => {
+  console.log(parts)
+  const sum = parts.reduce((total, part) => {
+    return total + part.exercises
+  }, 0)
+  console.log(sum)
+
   return (
     <div>
-      <p>Total of {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} excercises</p>
+      <p>Total of {sum} excercises</p>
     </div>
   )
 }
