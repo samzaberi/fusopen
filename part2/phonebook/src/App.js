@@ -1,6 +1,40 @@
-
-
 import React, { useState } from 'react'
+
+const PersonForm = (props) => {
+
+  return (
+    <form onSubmit={props.handleAddClick}>
+      <div>
+        name: <input value={props.name} onChange={props.onNameChange} />
+        <br />
+          number: <input value={props.number} onChange={props.onNumberChange} />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
+
+const Persons = (props) => {
+  const personsToShow = props.searchName.length === 0
+    ? props.persons
+    : props.persons.filter(person => person.name.toLowerCase().includes(props.searchName.toLowerCase()))
+
+  return (
+    <div>
+      {personsToShow.map(person => <p key={person.name}>{person.name} {person.phonenumber}</p>)}
+    </div>
+  )
+}
+
+const Filter = (props) => {
+  return (
+    <div>
+      filter shown with: <input value={props.searchName} onChange={props.onSearchChange} />
+    </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -58,28 +92,20 @@ const App = () => {
     setSearchName(event.target.value)
   }
 
-  const personsToShow = searchName.length === 0
-    ? persons
-    : persons.filter(person => person.name.toLowerCase().includes(searchName.toLowerCase()))
-
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with: <input value={searchName} onChange={handleSearchChange} />
-      <h2>add a new</h2>
-      <form onSubmit={checkSubmission}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-          <br />
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
+      <Filter searchName={searchName} onSearchChange={handleSearchChange} />
 
-      {personsToShow.map(person => <p key={person.name}>{person.name} {person.phonenumber}</p>)}
+      <h2>add a new</h2>
+      <PersonForm handleAddClick={checkSubmission}
+        name={newName}
+        onNameChange={handleNameChange}
+        number={newNumber}
+        onNumberChange={handleNumberChange} />
+
+      <h2>Numbers</h2>
+      <Persons searchName={searchName} persons={persons} />
 
     </div>
   )
