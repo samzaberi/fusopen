@@ -23,11 +23,7 @@ const Total = ({ parts }) => {
     }, 0)
     // console.log(sum)
 
-    return (
-        <div>
-            <p><strong>Total of {sum} excercises</strong></p>
-        </div>
-    )
+    return <p><strong>Total of {sum} excercises</strong></p>
 }
 
 const Course = ({ course }) => {
