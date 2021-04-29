@@ -24,7 +24,7 @@ const Persons = (props) => {
 
   return (
     <div>
-      {personsToShow.map(person => <p key={person.name}>{person.name} {person.phonenumber}</p>)}
+      {personsToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
     </div>
   )
 }
