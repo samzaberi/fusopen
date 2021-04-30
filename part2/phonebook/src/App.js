@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personsService from './services/persons'
 
 const PersonForm = (props) => {
 
@@ -44,10 +44,8 @@ const App = () => {
   const [searchName, setSearchName] = useState('')
 
   useEffect(() => {
-    // console.log('effect')
-    axios.get('http://localhost:3001/persons')
+    personsService.getAll()
       .then(response => {
-        // console.log('promise fulfilled')
         setPersons(response.data)
       })
   }, [])
@@ -56,17 +54,16 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+    if (persons.some(personExists)) {
+      alert(`${newName} is already added to phonebook`)
+      return true
+    }
+
     const personObject = {
       name: newName,
       number: newNumber
     }
-
-    if (persons.some(personExists)) {
-      console.log("personexists", personExists(personObject.name))
-      alert(`${newName} is already added to phonebook`)
-      return true
-    }
-    axios.post('http://localhost:3001/persons', personObject)
+    personsService.create(personObject)
       .then(response => {
         console.log(response.data)
         setPersons(persons.concat(response.data))
