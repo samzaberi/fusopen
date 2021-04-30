@@ -16,6 +16,18 @@ const PersonForm = (props) => {
     </form>
   )
 }
+const Person = (props) => {
+  const onDeleteClick = () => {
+    if (window.confirm(`Delete ${props.name} ?`)) {
+      props.handleDelete()
+    }
+  }
+  return (
+    <div>
+      {props.name} {props.number} <button onClick={onDeleteClick}>delete</button>
+    </div>
+  )
+}
 
 const Persons = (props) => {
   const personsToShow = props.searchName.length === 0
@@ -24,10 +36,21 @@ const Persons = (props) => {
 
   return (
     <div>
-      {personsToShow.map(person => <p key={person.id}>{person.name} {person.number}</p>)}
+      {personsToShow.map(person => {
+        return (
+          <Person key={person.id} name={person.name}
+            number={person.number}
+            handleDelete={() => props.callDelete(person.id)}
+          />
+
+        )
+      }
+      )}
     </div>
   )
 }
+
+
 
 const Filter = (props) => {
   return (
@@ -74,6 +97,17 @@ const App = () => {
 
   }
 
+  const delPerson = (id) => {
+    personsService.deletePerson(id)
+      .then(() => {
+        console.log("person deleted")
+        personsService.getAll()
+          .then(response => {
+            setPersons(response.data)
+          })
+      })
+  }
+
   const handleNameChange = (event) => {
     // console.log(event.target.value)
     setNewName(event.target.value)
@@ -100,7 +134,10 @@ const App = () => {
         onNumberChange={handleNumberChange} />
 
       <h2>Numbers</h2>
-      <Persons searchName={searchName} persons={persons} />
+      <Persons searchName={searchName}
+        persons={persons}
+        callDelete={delPerson}
+      />
 
     </div>
   )

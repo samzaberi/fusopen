@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": 2
@@ -16,34 +11,9 @@
       "id": 3
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
+      "name": "Aleta brown",
+      "number": "090-203853",
       "id": 4
-    },
-    {
-      "name": "newman hat",
-      "number": "011-289345",
-      "id": 5
-    },
-    {
-      "name": "don draper",
-      "number": "012-29345",
-      "id": 6
-    },
-    {
-      "name": "micah end",
-      "number": "011-345839",
-      "id": 7
-    },
-    {
-      "name": "john junior",
-      "number": "090-119823",
-      "id": 8
-    },
-    {
-      "name": "Arto Hellas obirne",
-      "number": "040-123456",
-      "id": 9
     }
   ]
 }
