@@ -24,7 +24,7 @@ const Persons = (props) => {
 
   return (
     <div>
-      {personsToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      {personsToShow.map(person => <p key={person.id}>{person.name} {person.number}</p>)}
     </div>
   )
 }
@@ -44,35 +44,37 @@ const App = () => {
   const [searchName, setSearchName] = useState('')
 
   useEffect(() => {
-    console.log('effect')
+    // console.log('effect')
     axios.get('http://localhost:3001/persons')
       .then(response => {
-        console.log('promise fulfilled')
+        // console.log('promise fulfilled')
         setPersons(response.data)
       })
   }, [])
 
-  const addPerson = () => {
+  const personExists = (obj) => obj.name === newName
+
+  const addPerson = (event) => {
+    event.preventDefault()
     const personObject = {
       name: newName,
-      phonenumber: newNumber
+      number: newNumber
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
 
-  }
+    if (persons.some(personExists)) {
+      console.log("personexists", personExists(personObject.name))
+      alert(`${newName} is already added to phonebook`)
+      return true
+    }
+    axios.post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        console.log(response.data)
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
+    return false
 
-  const checkSubmission = (event) => {
-    event.preventDefault()
-    persons.forEach(person => {
-      if (person.name === newName) {
-        alert(`${newName} is already added to phonebook`)
-      } else {
-        addPerson()
-      }
-
-    })
   }
 
   const handleNameChange = (event) => {
@@ -94,7 +96,7 @@ const App = () => {
       <Filter searchName={searchName} onSearchChange={handleSearchChange} />
 
       <h2>add a new</h2>
-      <PersonForm handleAddClick={checkSubmission}
+      <PersonForm handleAddClick={addPerson}
         name={newName}
         onNameChange={handleNameChange}
         number={newNumber}
