@@ -19,6 +19,26 @@
       "name": "nathan ross",
       "number": "010-123456",
       "id": 5
+    },
+    {
+      "name": "john boos",
+      "number": "011-89123",
+      "id": 6
+    },
+    {
+      "name": "next man",
+      "number": "091-12352",
+      "id": 7
+    },
+    {
+      "name": "pipin long",
+      "number": "091-029384",
+      "id": 8
+    },
+    {
+      "name": "halima go",
+      "number": "9180-29384",
+      "id": 9
     }
   ]
 }

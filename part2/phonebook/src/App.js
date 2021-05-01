@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import personsService from './services/persons'
+import "./App.css"
+
 
 const PersonForm = (props) => {
 
@@ -50,12 +52,22 @@ const Persons = (props) => {
   )
 }
 
-
-
 const Filter = (props) => {
   return (
     <div>
       filter shown with: <input value={props.searchName} onChange={props.onSearchChange} />
+    </div>
+  )
+}
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="success">
+      {message}
     </div>
   )
 }
@@ -65,6 +77,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [message, setMessage] = useState('something happend...')
+  const [classn, setClassn] = useState('')
 
   useEffect(() => {
     personsService.getAll()
@@ -100,6 +114,10 @@ const App = () => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
+        setMessage(`Added ${newName}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
     return 2
 
@@ -147,6 +165,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter searchName={searchName} onSearchChange={handleSearchChange} />
 
       <h2>add a new</h2>
@@ -154,7 +173,8 @@ const App = () => {
         name={newName}
         onNameChange={handleNameChange}
         number={newNumber}
-        onNumberChange={handleNumberChange} />
+        onNumberChange={handleNumberChange}
+      />
 
       <h2>Numbers</h2>
       <Persons searchName={searchName}
