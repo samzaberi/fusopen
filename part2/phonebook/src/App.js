@@ -60,13 +60,13 @@ const Filter = (props) => {
   )
 }
 
-const Notification = ({ message }) => {
+const Notification = ({ message, classn }) => {
   if (message === null) {
     return null
   }
 
   return (
-    <div className="success">
+    <div className={classn}>
       {message}
     </div>
   )
@@ -77,7 +77,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
-  const [message, setMessage] = useState('something happend...')
+  const [message, setMessage] = useState('')
   const [classn, setClassn] = useState('')
 
   useEffect(() => {
@@ -115,6 +115,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         setMessage(`Added ${newName}`)
+        setClassn("success")
         setTimeout(() => {
           setMessage(null)
         }, 5000)
@@ -144,6 +145,13 @@ const App = () => {
         personsService.getAll()
           .then(response => {
             setPersons(response.data)
+          }).catch(error => {
+            setMessage(`information of ${id} has already been removed from server`)
+            setClassn("error")
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== id))
           })
       })
   }
@@ -165,7 +173,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} classn={classn} />
       <Filter searchName={searchName} onSearchChange={handleSearchChange} />
 
       <h2>add a new</h2>

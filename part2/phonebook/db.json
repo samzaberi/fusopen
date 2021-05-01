@@ -1,21 +1,6 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "090-123456",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "9864894",
-      "id": 3
-    },
-    {
-      "name": "Aleta brown",
-      "number": "090-203853",
-      "id": 4
-    },
-    {
       "name": "nathan ross",
       "number": "010-123456",
       "id": 5
@@ -39,6 +24,11 @@
       "name": "halima go",
       "number": "9180-29384",
       "id": 9
+    },
+    {
+      "name": "optine",
+      "number": "09720-12837",
+      "id": 10
     }
   ]
 }
