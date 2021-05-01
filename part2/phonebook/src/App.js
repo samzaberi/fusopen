@@ -77,9 +77,17 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+
+    const objArr = persons.filter(person => person.name === newName)
+    const obj = objArr[0]
+    if (persons.some(personExists) && obj.number !== newNumber) {
+      updatePerson(obj)
+      return 0
+    }
+
     if (persons.some(personExists)) {
       alert(`${newName} is already added to phonebook`)
-      return true
+      return 1
     }
 
     const personObject = {
@@ -93,8 +101,22 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-    return false
+    return 2
 
+  }
+
+  const updatePerson = (obj) => {
+    window.confirm(`${newName} is already added to phonebook,replace the old number with a new one?`)
+    const updatedPerson = {
+      name: newName,
+      number: newNumber
+    }
+    personsService.update(obj.id, updatedPerson)
+      .then(response => {
+        setPersons(persons.map(p => p.id !== obj.id ? p : response.data))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const delPerson = (id) => {
@@ -107,6 +129,7 @@ const App = () => {
           })
       })
   }
+
 
   const handleNameChange = (event) => {
     // console.log(event.target.value)
