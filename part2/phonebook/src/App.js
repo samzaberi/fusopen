@@ -1,76 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import personsService from './services/persons'
 import "./App.css"
+import PersonForm from "./components/PersonForm"
+import Persons from "./components/Persons"
+import Filter from "./components/Filter"
+import Notification from "./components/Notification"
 
-
-const PersonForm = (props) => {
-
-  return (
-    <form onSubmit={props.handleAddClick}>
-      <div>
-        name: <input value={props.name} onChange={props.onNameChange} />
-        <br />
-          number: <input value={props.number} onChange={props.onNumberChange} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  )
-}
-const Person = (props) => {
-  const onDeleteClick = () => {
-    if (window.confirm(`Delete ${props.name} ?`)) {
-      props.handleDelete()
-    }
-  }
-  return (
-    <div>
-      {props.name} {props.number} <button onClick={onDeleteClick}>delete</button>
-    </div>
-  )
-}
-
-const Persons = (props) => {
-  const personsToShow = props.searchName.length === 0
-    ? props.persons
-    : props.persons.filter(person => person.name.toLowerCase().includes(props.searchName.toLowerCase()))
-
-  return (
-    <div>
-      {personsToShow.map(person => {
-        return (
-          <Person key={person.id} name={person.name}
-            number={person.number}
-            handleDelete={() => props.callDelete(person.id)}
-          />
-
-        )
-      }
-      )}
-    </div>
-  )
-}
-
-const Filter = (props) => {
-  return (
-    <div>
-      filter shown with: <input value={props.searchName} onChange={props.onSearchChange} />
-    </div>
-  )
-}
-
-const Notification = ({ message, classn }) => {
-  if (message === null) {
-    return null
-  }
-
-  return (
-    <div className={classn}>
-      {message}
-    </div>
-  )
-}
 
 const App = () => {
   const [persons, setPersons] = useState([])
