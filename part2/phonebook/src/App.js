@@ -55,6 +55,15 @@ const App = () => {
           setMessage(null)
         }, 5000)
       })
+      .catch(error => {
+        console.log(error.response.data)
+        const err = error.response.data
+        setMessage(err.error)
+        setClassn("error")
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
     return 2
 
   }
@@ -70,6 +79,15 @@ const App = () => {
         setPersons(persons.map(p => p.id !== obj.id ? p : response.data))
         setNewName('')
         setNewNumber('')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        const err = error.response.data
+        setMessage(err.error)
+        setClassn("error")
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
   }
 
