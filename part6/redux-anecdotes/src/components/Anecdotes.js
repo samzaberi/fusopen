@@ -7,14 +7,10 @@ const Anecdotes = (props) => {
     const anecdotes = useSelector(state => state.anecdotes)
     const dispatch = useDispatch()
 
-    const vote = (id) => {
-        console.log('vote', id)
-        dispatch(voteAnecdote(id))
-    }
 
-    const voteAndNotify = (id, content) => {
-        dispatch(voteAnecdote(id))
-        dispatch(setVoteNotification(content))
+    const voteAndNotify = (anecdote) => {
+        dispatch(voteAnecdote(anecdote))
+        dispatch(setVoteNotification(anecdote.content))
     }
 
     return (
@@ -26,7 +22,7 @@ const Anecdotes = (props) => {
                     </div>
                     <div>
                         has {anecdote.votes}
-                        <button onClick={() => voteAndNotify(anecdote.id, anecdote.content)}>
+                        <button onClick={() => voteAndNotify(anecdote)}>
                             vote
                             </button>
                     </div>
