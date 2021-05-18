@@ -11,16 +11,16 @@ const Notification = () => {
     borderWidth: 1
   }
 
+  if (notification === null) {
+    return null
 
-  if (notification !== null) {
-    return (
-      <div style={style}>
-        {notification}
-      </div>
-    )
   }
 
-  return null
+  return (
+    <div style={style}>
+      {notification}
+    </div>
+  )
 
 }
 
