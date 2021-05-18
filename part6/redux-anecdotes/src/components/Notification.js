@@ -14,12 +14,7 @@ const Notification = () => {
   }
 
 
-
   if (notification !== null) {
-    setTimeout(() => {
-      dispatch(removeNotification())
-    }, 5000);
-
     return (
       <div style={style}>
         {notification}
