@@ -4,7 +4,6 @@ import { createAnecdote } from '../reducers/anecdoteReducer'
 import { setCreateAnecNotification } from '../reducers/notificationReducer'
 import anecdotesService from '../services/anecdotes'
 
-const getId = () => (100000 * Math.random()).toFixed(0)
 
 const AnecdoteForm = (props) => {
     const dispatch = useDispatch()
@@ -13,12 +12,7 @@ const AnecdoteForm = (props) => {
         event.preventDefault()
         const content = event.target.anecdote.value
         event.target.anecdote.value = ''
-        const response = await anecdotesService.create({
-            content,
-            id: getId(),
-            votes: 0
-        })
-        dispatch(createAnecdote(response))
+        dispatch(createAnecdote(content))
         dispatch(setCreateAnecNotification(content))
     }
 
