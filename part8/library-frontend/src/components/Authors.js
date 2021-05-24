@@ -29,7 +29,9 @@ const Authors = (props) => {
   const [born, setBorn] = useState('')
 
   const result = useQuery(ALL_AUTHORS)
-  const [updateAuthor] = useMutation(EDIT_AUTHOR)
+  const [updateAuthor] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }]
+  })
 
   const submit = async (event) => {
     event.preventDefault()
@@ -78,10 +80,11 @@ const Authors = (props) => {
       <form onSubmit={submit}>
         <div>
           Author
-          <input
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+          <select value={author} onChange={({ target }) => setAuthor(target.value)}>
+            {result.data.allAuthors.map(a =>
+              <option value={a.name} key={a.name}>{a.name}</option>
+            )}
+          </select>
         </div>
         <div>
           born
