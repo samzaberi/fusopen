@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const Author = require('./models/Author')
@@ -99,18 +99,18 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
     })
 
 const typeDefs = gql`
-type Book {
-    title:String!
-    published:Int!
-    author:Author
-    id:ID!
-    genres:[String!]!
-}
 type Author {
     name:String!
     id:ID!
     born:Int
     bookCount:Int
+}
+type Book {
+    title:String!
+    published:Int!
+    author:Author!
+    id:ID!
+    genres:[String!]!
 }
   type Query {
     bookCount:Int!
@@ -120,19 +120,24 @@ type Author {
   }
 type Mutation {
     addBook(
-        title: String!
-        author: String
+        title: String!,
+        name:  String!,
+        born:Int
         published: Int!,
         genres: [String!]!
     ): Book
-    editAuthor(name:String!,setBornTo:Int!):Author
+    editAuthor(name:String!,born:Int!):Author
+    addAuthor(
+        name:String!,
+        born:Int
+    ):Author
 }
 `
 
 const resolvers = {
     Query: {
-        bookCount: () => books.length,
-        authorCount: () => authors.length,
+        bookCount: () => Book.collection.countDocuments(),
+        authorCount: () => Author.collection.countDocuments(),
         allBooks: (root, args) => {
             if (args.genre && args.author) {
                 return books.filter(b => b.author === args.author && b.genres.includes(args.genre))
@@ -146,41 +151,56 @@ const resolvers = {
 
 
         },
-        allAuthors: () => {
-            const result = authors.map(author => {
-                let count = books.reduce((a, b) => b.author === author.name ? a += 1 : a, 0)
-                return {
-                    ...author,
-                    bookCount: count
-                }
-            })
+        allAuthors: async () => {
+            const result = await Author.find({})
             return result
+            // const result = authors.map(author => {
+            //     let count = books.reduce((a, b) => b.author === author.name ? a += 1 : a, 0)
+            //     return {
+            //         ...author,
+            //         bookCount: count
+            //     }
+            // })
+            // return result
         }
     },
     Mutation: {
-        addBook: (root, args) => {
+        addBook: async (root, args) => {
             const book = new Book({ ...args })
-            return book.save()
-            // const book = { ...args, id: uuid() }
-            // const author = {
-            //     "name": args.author,
-            //     id: uuid()
-            // }
-            // books = books.concat(book)
-            // authors = authors.concat(author)
-            // return book
+            // const author = new Author({ "name": args.name })
+            // author.save()
+            try {
+                await book.save()
+
+            } catch (error) {
+                throw new UserInputError(error.message, {
+                    invalidArgs: args,
+                })
+            }
+
         },
-        editAuthor: (root, args) => {
-            const author = authors.find(a => a.name === args.name)
-            if (!author) {
-                return null
+        editAuthor: async (root, args) => {
+            try {
+                const result = await Author.findOneAndUpdate({ name: args.name }, { born: args.born }, { new: true })
+                return result
+            } catch (error) {
+                throw new UserInputError(error.message, {
+                    invalidArgs: args,
+                })
             }
-            const authorEdit = {
-                ...author,
-                born: args.setBornTo
+
+
+        },
+        addAuthor: async (root, args) => {
+            try {
+                const author = new Author({ ...args })
+                const result = await author.save()
+            } catch (error) {
+                throw new UserInputError(error.message, {
+                    invalidArgs: args,
+                })
             }
-            authors = authors.map(a => a.name === args.name ? authorEdit : a)
-            return authorEdit
+
         }
     }
 
