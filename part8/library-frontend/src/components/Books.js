@@ -70,13 +70,6 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {/* {result.data.allBooks.map(a =>
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          )} */}
           {books.map(a =>
             <tr key={a.title}>
               <td>{a.title}</td>
