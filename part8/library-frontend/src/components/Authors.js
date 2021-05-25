@@ -16,7 +16,7 @@ const EDIT_AUTHOR = gql`
 mutation updateAuthor($author:String!,$born:Int!){
   editAuthor(
     name:$author,
-    setBornTo:$born
+    born:$born
   ){
     name,
     born
