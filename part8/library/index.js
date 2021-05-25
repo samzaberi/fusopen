@@ -136,8 +136,7 @@ type User {
 type Mutation {
     addBook(
         title: String!,
-        name:  String!,
-        born:Int
+        author:  String!,
         published: Int!,
         genres: [String!]!
     ): Book
@@ -178,18 +177,19 @@ const resolvers = {
         },
         allAuthors: async () => {
             const response = await Author.find({})
-            // const result=response.map(a=>{
-            //     let count=Book.collection.countDocuments({})
-            // })
-            return response
-            // const result = authors.map(author => {
-            //     let count = books.reduce((a, b) => b.author === author.name ? a += 1 : a, 0)
-            //     return {
-            //         ...author,
-            //         bookCount: count
-            //     }
-            // })
-            // return result
+            // console.log(response)
+            const result = response.map(async a => {
+                let count = await Book.collection.countDocuments({ author: a._id })
+                let author = {
+                    name: a.name,
+                    born: a.born ? a.born : null,
+                    bookCount: count
+                }
+                // console.log(author)
+                return author
+            })
+
+            return result
         },
         me: (root, args, context) => {
             return context.currentUser
@@ -200,9 +200,27 @@ const resolvers = {
             if (!context.currentUser) {
                 return "token missing or invalid"
             }
-            const book = new Book({ ...args })
-            // const author = new Author({ "name": args.name })
-            // author.save()
+            const author = await Author.findOne({ name: args.author })
+            let bookDetails = {}
+            if (author) {
+                bookDetails = {
+                    title: args.title,
+                    published: args.published,
+                    author: author._id,
+                    genres: args.genres
+                }
+            } else {
+                const author = new Author({ "name": args.author })
+                const result = await author.save()
+                bookDetails = {
+                    title: args.title,
+                    published: args.published,
+                    author: result._id,
+                    genres: args.genres
+                }
+            }
+
+            const book = new Book(bookDetails)
             try {
                 await book.save()
 
