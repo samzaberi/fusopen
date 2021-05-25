@@ -197,7 +197,7 @@ const resolvers = {
     Mutation: {
         addBook: async (root, args, context) => {
             if (!context.currentUser) {
-                return "token missing or invalid"
+                return console.error("token missing or invalid")
             }
             const author = await Author.findOne({ name: args.author })
             let bookDetails = {}
@@ -232,7 +232,7 @@ const resolvers = {
         },
         editAuthor: async (root, args, context) => {
             if (!context.currentUser) {
-                return "token missing or invalid"
+                return console.error("token missing or invalid")
             }
 
             try {
