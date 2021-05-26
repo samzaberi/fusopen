@@ -98,6 +98,8 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
         console.log('error connecting to MongoDB:', error.message)
     })
 
+mongoose.set('debug', true);
+
 const typeDefs = gql`
 type Author {
     name:String!
