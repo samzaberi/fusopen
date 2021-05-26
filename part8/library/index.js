@@ -1,4 +1,4 @@
-const { ApolloServer, gql, UserInputError } = require('apollo-server')
+const { ApolloServer, gql, UserInputError, PubSub } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const Author = require('./models/Author')
@@ -32,11 +32,6 @@ let authors = [
         id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
     },
 ]
-
-/*
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
-*/
 
 let books = [
     {
@@ -90,7 +85,7 @@ let books = [
     },
 ]
 
-
+const pubsub = new PubSub()
 
 const JWT_SECRET = 'standalonecomplex'
 
@@ -154,6 +149,9 @@ type Mutation {
         password: String!
       ): Token
 }
+type Subscription {
+    bookAdded: Book!
+}  
 `
 
 const resolvers = {
@@ -222,6 +220,8 @@ const resolvers = {
             const book = new Book(bookDetails)
             try {
                 await book.save()
+                pubsub.publish('BOOK_ADDED', { bookAdded: book })
+                return book
 
             } catch (error) {
                 throw new UserInputError(error.message, {
@@ -284,6 +284,11 @@ const resolvers = {
 
             return { value: jwt.sign(userForToken, JWT_SECRET) }
         },
+    },
+    Subscription: {
+        bookAdded: {
+            subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+        }
     }
 
 }
@@ -301,6 +306,7 @@ const server = new ApolloServer({
     }
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
     console.log(`Server ready at ${url}`)
+    console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
