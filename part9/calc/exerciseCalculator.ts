@@ -5,14 +5,14 @@ interface TrainingResult {
     trainingDays: number,
     success: boolean,
     rating: Rating,
-    ratingDescription: String,
+    ratingDescription: string,
     target: number,
     average: number
 }
 
 const calculateExercises = (hours: Array<number>): TrainingResult => {
-    const trainingDays: Array<number> = hours.filter(n => n > 0)
-    const avg: number = trainingDays.reduce((a, c) => a + c, 0) / hours.length
+    const trainingDays: Array<number> = hours.filter(n => n > 0);
+    const avg: number = trainingDays.reduce((a, c) => a + c, 0) / hours.length;
     return {
         periodLength: hours.length,
         trainingDays: trainingDays.length,
@@ -21,10 +21,10 @@ const calculateExercises = (hours: Array<number>): TrainingResult => {
         ratingDescription: "needs work",
         target: 5,
         average: avg
-    }
-}
+    };
+};
 
-const [first, second, ...hoursString] = process.argv;
+const hoursString = process.argv.slice(2);
 console.log(hoursString);
 
 const hours: Array<number> = hoursString.map(a => {
