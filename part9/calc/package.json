@@ -6,11 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts-node": "ts-node",
-    "calculateBmi": "ts-node bmiCalculator.ts"
+    "calculateBmi": "ts-node bmiCalculator.ts",
+    "calculateExercises": "ts-node exerciseCalculator.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^15.6.1",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.2"
   }
