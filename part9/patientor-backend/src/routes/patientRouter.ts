@@ -14,5 +14,13 @@ router.post('/', (req, res) => {
     res.send(newPatient);
 });
 
+router.get('/:id', (req, res) => {
+    const result = patientService.findById(req.params.id);
+    if (!result) {
+        res.status(404).send({ error: "patient not found" });
+    }
+    res.send(result);
+});
+
 
 export default router;

@@ -1,10 +1,10 @@
 import patientData from '../../data/patients.json';
-import { Gender, Patient } from '../types';
+import { Gender, Patient, PublicPatient } from '../types';
 import { v1 as uuid } from 'uuid';
 
 const patients: Array<Patient> = patientData;
 
-const getPatients = (): Omit<Patient, 'ssn'>[] => {
+const getPatients = (): PublicPatient[] => {
     return patients.map(({ id, name, dateOfBirth, gender, occupation }) => {
         return {
             dateOfBirth,
@@ -16,35 +16,26 @@ const getPatients = (): Omit<Patient, 'ssn'>[] => {
     });
 };
 
-// const addPatient = (name: string, dateOfBirth: string, ssn: string, gender: string, occupation: string): Patient => {
-//     const id = uuid();
-//     const newPatient: Patient = {
-//         dateOfBirth,
-//         gender,
-//         id,
-//         ssn,
-//         name,
-//         occupation
-
-//     };
-//     patients.concat(newPatient);
-//     return newPatient;
-// };
-
-const addPatient = (patient: Omit<Patient, 'id'>): Patient => {
+const addPatient = (patient: Omit<Patient, 'id' | 'entries'>): Patient => {
     const id = uuid();
     const newPatient: Patient = {
         ...patient,
-        id
+        id,
+        entries: []
 
     };
     patients.concat(newPatient);
     return newPatient;
 };
 
+const findById = (id: string): PublicPatient | undefined => {
+    const entry = patients.find(d => d.id === id);
+    return entry;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const toPatient = (object: any): Omit<Patient, 'id'> => {
-    const newPatient: Omit<Patient, 'id'> = {
+export const toPatient = (object: any): Omit<Patient, 'id' | 'entries'> => {
+    const newPatient: Omit<Patient, 'id' | 'entries'> = {
         dateOfBirth: parseDate(object.dateOfBirth),
         gender: parseGender(object.gender),
         occupation: parseStringVars(object.occupation),
@@ -93,5 +84,6 @@ const parseGender = (gender: unknown): Gender => {
 
 export default {
     getPatients,
-    addPatient
+    addPatient,
+    findById
 };
