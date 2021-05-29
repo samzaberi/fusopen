@@ -1,5 +1,5 @@
 import patientData from '../../data/patients.json';
-import { Patient } from '../types';
+import { Gender, Patient } from '../types';
 import { v1 as uuid } from 'uuid';
 
 const patients: Array<Patient> = patientData;
@@ -46,7 +46,7 @@ const addPatient = (patient: Omit<Patient, 'id'>): Patient => {
 export const toPatient = (object: any): Omit<Patient, 'id'> => {
     const newPatient: Omit<Patient, 'id'> = {
         dateOfBirth: parseDate(object.dateOfBirth),
-        gender: parseStringVars(object.gender),
+        gender: parseGender(object.gender),
         occupation: parseStringVars(object.occupation),
         ssn: parseStringVars(object.ssn),
         name: parseStringVars(object.name)
@@ -79,6 +79,17 @@ const parseDate = (date: unknown): string => {
     return date;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isGender = (param: any): param is Gender => {
+    return Object.values(Gender).includes(param);
+};
+
+const parseGender = (gender: unknown): Gender => {
+    if (!gender || !isGender(gender)) {
+        throw new Error('Incorrect or missing gender: ' + gender);
+    }
+    return gender;
+};
 
 export default {
     getPatients,
