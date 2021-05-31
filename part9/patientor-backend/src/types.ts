@@ -41,5 +41,6 @@ interface HospitalEntry extends CoreEntry {
     type: string
 }
 
+
 export type Entry = OccupationalHealthCareEntry | HospitalEntry;
 
