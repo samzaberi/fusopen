@@ -7,7 +7,6 @@ import { Patient } from "../types";
 
 const PatientDetails = () => {
     const [patient, setPatient] = useState<Patient>();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const id: string = useParams<{ id: string }>().id;
 
     useEffect(() => {
