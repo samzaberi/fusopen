@@ -32,6 +32,19 @@ const PatientDetails = () => {
                 gender: {patient?.gender}<br />
                 occupation: {patient?.occupation}<br />
             </div>
+            <h3>entries</h3>
+            <div>
+                {patient?.entries?.map(e =>
+                    <div key={e.id}>
+                        {e.date}: {e.description}<br />
+                        <ul>
+                            {e.diagnoseCodes.map(d =>
+                                <li key={d}>{d}</li>
+                            )}
+                        </ul>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
