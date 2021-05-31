@@ -4,7 +4,7 @@ import { v1 as uuid } from 'uuid';
 
 const patients: Array<Patient> = patientData;
 
-const getPatients = (): PublicPatient[] => {
+const getPublicPatients = (): PublicPatient[] => {
     return patients.map(({ id, name, dateOfBirth, gender, occupation }) => {
         return {
             dateOfBirth,
@@ -14,6 +14,10 @@ const getPatients = (): PublicPatient[] => {
             occupation
         };
     });
+};
+
+const getPatients = (): Patient[] => {
+    return patients;
 };
 
 const addPatient = (patient: Omit<Patient, 'id' | 'entries'>): Patient => {
@@ -85,5 +89,6 @@ const parseGender = (gender: unknown): Gender => {
 export default {
     getPatients,
     addPatient,
+    getPublicPatients,
     findById
 };
