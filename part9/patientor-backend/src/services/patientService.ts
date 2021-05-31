@@ -28,7 +28,7 @@ const addPatient = (patient: Omit<Patient, 'id' | 'entries'>): Patient => {
     return newPatient;
 };
 
-const findById = (id: string): PublicPatient | undefined => {
+const findById = (id: string): Patient | undefined => {
     const entry = patients.find(d => d.id === id);
     return entry;
 };
