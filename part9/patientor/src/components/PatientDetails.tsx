@@ -11,27 +11,19 @@ const PatientDetails = () => {
     const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
 
     useEffect(() => {
-        const fetchPatient = async () => {
+        const fetchPatientData = async () => {
             try {
                 const { data: patient } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
                 setPatient(patient);
-
-            } catch (error) {
-                console.error(error.message);
-            }
-        };
-        const fetchDiagnoses = async () => {
-            try {
                 const { data: diagnos } = await axios.get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`);
                 setDiagnoses(diagnoses.concat(diagnos));
+
             } catch (error) {
                 console.error(error.message);
             }
-
         };
+        void fetchPatientData();
 
-        void fetchPatient();
-        void fetchDiagnoses();
     });
 
 
