@@ -6,7 +6,22 @@
         "ssn": "090786-122X",
         "gender": "male",
         "occupation": "New york city cop",
-        "entries": []
+        "entries": [
+            {
+                "id": "d2770036-f723-11e9-8f0b-362b9e124667",
+                "date": "2010-09-19",
+                "type": "hospital",
+                "specialist": "MD house",
+                "diagnoseCodes": [
+                    "M24.2"
+                ],
+                "description": "broken leg",
+                "discharge": {
+                    "date": "2010-09-20",
+                    "criteria": "leg healed"
+                }
+            }
+        ]
     },
     {
         "id": "d2773598-f723-11e9-8f0b-362b9e155667",

@@ -11,7 +11,7 @@ export interface Patient {
     ssn: string,
     gender: string,
     occupation: string,
-    entries: Entry[]
+    entries?: Entry[]
 }
 
 export enum Gender {
@@ -34,11 +34,11 @@ export interface CoreEntry {
 }
 
 interface OccupationalHealthCareEntry extends CoreEntry {
-    type: "occupational"
+    type: string
 }
 
 interface HospitalEntry extends CoreEntry {
-    type: "hospital"
+    type: string
 }
 
 export type Entry = OccupationalHealthCareEntry | HospitalEntry;
