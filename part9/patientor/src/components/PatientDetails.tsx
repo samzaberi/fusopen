@@ -8,7 +8,7 @@ import { Diagnosis, Patient } from "../types";
 const PatientDetails = () => {
     const [patient, setPatient] = useState<Patient>();
     const id: string = useParams<{ id: string }>().id;
-    const [diagnoses, setDiagnoses] = useState<Diagnosis[]>();
+    const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
 
     useEffect(() => {
         const fetchPatient = async () => {
@@ -16,23 +16,14 @@ const PatientDetails = () => {
                 const { data: patient } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
                 setPatient(patient);
 
-                // const entries = patient.entries ? patient.entries : [];
-                // const diagnoseCodes = entries.map(e => e.diagnoseCodes).flat();
-                // const uniqDiagnoseCodes = [...new Set(diagnoseCodes)];
-                // for (const dg of uniqDiagnoseCodes) {
-                //     const { data: diagnosis } = await axios.get<Diagnosis>(`${apiBaseUrl}/diagnoses/${dg}`);
-                //     setDiagnoses(diagnoses?.concat(diagnosis));
-                // }
-
-
             } catch (error) {
                 console.error(error.message);
             }
         };
         const fetchDiagnoses = async () => {
             try {
-                const { data: diagnoses } = await axios.get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`);
-                setDiagnoses(diagnoses);
+                const { data: diagnos } = await axios.get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`);
+                setDiagnoses(diagnoses.concat(diagnos));
             } catch (error) {
                 console.error(error.message);
             }
@@ -58,7 +49,11 @@ const PatientDetails = () => {
             <div>
                 {patient?.entries?.map(e =>
                     <div key={e.id}>
-                        {e.date}: {e.description}<br />
+                        {e.date}: {e.type}<br />
+                        {e.description}<br />
+                        specialist: {e.specialist}<br />
+                        discharged {e.discharge.date}: {e.discharge.criteria}<br />
+                        diagnoses:<br />
                         <ul>
                             {e.diagnoseCodes.map(d => {
                                 const diagnosis = diagnoses?.find(dg => dg.code = d);
