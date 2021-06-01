@@ -26,6 +26,7 @@ interface CoreEntry {
   specialist: string,
   diagnoseCodes: string[],
   description: string,
+  type: string,
   discharge: {
     date: string,
     criteria: string
