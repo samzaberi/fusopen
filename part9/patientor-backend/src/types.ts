@@ -35,11 +35,11 @@ export interface CoreEntry {
 }
 
 interface OccupationalHealthCareEntry extends CoreEntry {
-    type: "occupational"
+    type: string
 }
 
 interface HospitalEntry extends CoreEntry {
-    type: "hospital"
+    type: string
 }
 
 

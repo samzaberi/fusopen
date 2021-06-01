@@ -79,7 +79,7 @@ export const toEntry = (object: any): Omit<Entry, 'id'> => {
         specialist: parseStringVars(object.specialist),
         description: parseStringVars(object.description),
         diagnoseCodes: parseStrArr(object.diagnoseCodes),
-        type: parseStringVars(object.type),
+        type: parseStringVars(object.type) === "hospital" ? "hospital" : "occupational",
         discharge: {
             date: parseDate(object.discharge.date),
             criteria: parseStringVars(object.discharge.criteria)

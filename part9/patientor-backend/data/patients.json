@@ -10,7 +10,7 @@
             {
                 "id": "d2770036-f723-11e9-8f0b-362b9e124667",
                 "date": "2010-09-19",
-                "type": "hospital",
+                "type": "occupational",
                 "specialist": "MD house",
                 "diagnoseCodes": [
                     "M24.2"
