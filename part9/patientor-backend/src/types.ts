@@ -27,6 +27,7 @@ export interface CoreEntry {
     specialist: string,
     diagnoseCodes: string[],
     description: string,
+    type: string,
     discharge: {
         date: string,
         criteria: string
@@ -34,11 +35,11 @@ export interface CoreEntry {
 }
 
 interface OccupationalHealthCareEntry extends CoreEntry {
-    type: string
+    type: "occupational"
 }
 
 interface HospitalEntry extends CoreEntry {
-    type: string
+    type: "hospital"
 }
 
 
