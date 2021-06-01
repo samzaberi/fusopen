@@ -1,8 +1,8 @@
 import patientData from '../../data/patients.json';
-import { Gender, Patient, PublicPatient } from '../types';
+import { Entry, Gender, Patient, PublicPatient } from '../types';
 import { v1 as uuid } from 'uuid';
 
-const patients: Array<Patient> = patientData;
+let patients: Array<Patient> = patientData;
 
 const getPublicPatients = (): PublicPatient[] => {
     return patients.map(({ id, name, dateOfBirth, gender, occupation }) => {
@@ -37,6 +37,27 @@ const findById = (id: string): Patient | undefined => {
     return entry;
 };
 
+const addEntry = (id: string, entryDetails: Omit<Entry, 'id'>): Patient => {
+    const patient = patients.find(d => d.id === id);
+    if (!patient) {
+        throw new Error("invalid id");
+    }
+    // console.log("patient entries", patient.entries);
+    const newEntry = {
+        ...entryDetails,
+        id: uuid()
+    };
+    const patientEntries = patient.entries ? [...patient.entries, newEntry] : [newEntry];
+    // console.log(patientEntries);
+    const newPatient = {
+        ...patient,
+        entries: patientEntries
+    };
+    // console.log(newPatient);
+    patients = patients.filter(p => p.id === id ? newPatient : p);
+    return newPatient;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const toPatient = (object: any): Omit<Patient, 'id' | 'entries'> => {
     const newPatient: Omit<Patient, 'id' | 'entries'> = {
@@ -49,6 +70,30 @@ export const toPatient = (object: any): Omit<Patient, 'id' | 'entries'> => {
     };
 
     return newPatient;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const toEntry = (object: any): Omit<Entry, 'id'> => {
+    const newEntry: Omit<Entry, 'id'> = {
+        date: parseDate(object.date),
+        specialist: parseStringVars(object.specialist),
+        description: parseStringVars(object.description),
+        diagnoseCodes: parseStrArr(object.diagnoseCodes),
+        type: parseStringVars(object.type),
+        discharge: {
+            date: parseDate(object.discharge.date),
+            criteria: parseStringVars(object.discharge.criteria)
+        }
+
+
+    };
+
+    return newEntry;
+};
+
+const parseStrArr = (val: unknown[]): string[] => {
+    const result = val.map(element => parseStringVars(element));
+    return result;
 };
 
 const isString = (text: unknown): text is string => {
@@ -90,5 +135,6 @@ export default {
     getPatients,
     addPatient,
     getPublicPatients,
-    findById
+    findById,
+    addEntry
 };
